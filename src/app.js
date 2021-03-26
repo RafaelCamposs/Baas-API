@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes')
 
-mongoose.connect({
+const connectionString = ""
+mongoose.connect(process.env.MONGO_URL,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -21,6 +22,5 @@ app.use(express.json())
 
 app.use('/', routes);
 
-app.listen(3000,()=>{
-    console.log("Server Running on port 3000");
-})
+
+module.exports = app

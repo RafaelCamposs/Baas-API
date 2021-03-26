@@ -7,10 +7,13 @@ class UserController{
         const age = req.body.age;
         const gender = req.body.gender;
         const dob = req.body.dob;
-
-        await UserModel.create({ name, age, gender, dob });
-        console.log(res.json(UserModel));
-        return res.json(UserModel);
+        try {
+            const user = await UserModel.create({ name, age, gender, dob });
+            return res.status(200).json(user);
+        } catch (error) {
+            res.status(400).json('error')
+        }
+        
     }
 
     async list(req,res){

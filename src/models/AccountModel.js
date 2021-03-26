@@ -12,6 +12,10 @@ const AccountSchema = new Schema({
         type:String,
         required:true
     },
+    balance:{
+        type:Number,
+        default: 0
+    },
     Person_id:{
         type:String,
         required:true,
