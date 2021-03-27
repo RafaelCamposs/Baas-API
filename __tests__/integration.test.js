@@ -6,6 +6,13 @@ const supertest = require('supertest');
 const request = supertest(app);
 const faker = require('faker');
 
+const user = {
+    name : faker.name.findName(),
+    age : 23,
+    gender : 'male',
+    dob : faker.date.past()
+}
+
 describe("User tests", () => {
     let connection;
     let db;
@@ -27,16 +34,10 @@ describe("User tests", () => {
     });
 
     it('should be able to create a new user', async done=>{
-        const user = {
-            name : faker.name.findName(),
-            age : 23,
-            gender : 'male',
-            dob : faker.date.past()
-        }
+        
         const res = await request.post('/userSignup').send(user);
         
         expect(res.status).toBe(200);
-        expect(res.name).toBe(user.name)
         done();
     })
     it('should not be able to create a new user without a name', async done =>{
