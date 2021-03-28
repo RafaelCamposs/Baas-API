@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const { agent } = require('supertest');
+const UserModel = require('./UserModel');
+const bcrypt = require('bcrypt')
 const Schema = mongoose.Schema;
 
 const AccountSchema = new Schema({
@@ -16,14 +19,13 @@ const AccountSchema = new Schema({
         type:Number,
         default: 0
     },
-    Person_id:{
-        type:String,
-        required:true,
-        unique:true
+    user:{
+        type: String,
+        required: true
     }
 })
 
-UserSchema.pre(
+AccountSchema.pre(
     'save',
     async function (next){
         const account = this;
@@ -33,13 +35,13 @@ UserSchema.pre(
     }
 );
 
-UserSchema.methods.isValidPassword = async function(password){
-    const user = this;
+AccountSchema.methods.isValidPassword = async function(password){
+    const account = this;
     const compare = await bcrypt.compare(password, account.password);
 
     return compare;
 }
 
-const AccountModel = mongoose.model('account',AccountSchema);
+const AccountModel = mongoose.model('accounts',AccountSchema);
 
 module.exports = AccountModel;

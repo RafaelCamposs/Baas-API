@@ -8,6 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "faker": "^5.5.0",
     "mongodb": "^3.6.5",
