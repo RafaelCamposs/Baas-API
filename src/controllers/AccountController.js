@@ -1,8 +1,10 @@
 const AccountModel = require('../models/AccountModel')
 const UserModel = require('../models/UserModel')
+const passport = require('passport');
+
 class AccountController {
 
-    async create(req, res) {
+    async create(req, res, next){
         const email = req.body.email;
         const password = req.body.password;
         const balance = req.body.balance;
@@ -18,8 +20,10 @@ class AccountController {
         if(idDoNotExists == false) return res.status(406).json('user doesnt exist')
 
         try {
-            const account = await AccountModel.create({ email, password, balance, user })
-            return res.status(200).json(account);
+            const account = passport.authenticate('signup', { session: false })(req,res,next)
+            return res.status(200).json({
+                message: "Signup successful",
+            });
         } catch (error) {
             return res.status(400).json('error');
         }

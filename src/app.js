@@ -11,7 +11,7 @@ mongoose.set("useCreateIndex", true);
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
-
+require('./auth/auth');
 const app = express();
 
 
