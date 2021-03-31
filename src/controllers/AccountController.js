@@ -1,7 +1,7 @@
 const AccountModel = require('../models/AccountModel')
 const UserModel = require('../models/UserModel')
 const passport = require('passport');
-
+const jwt = require('jsonwebtoken');
 class AccountController {
 
     async create(req, res, next){
@@ -29,6 +29,53 @@ class AccountController {
         }
     }
 
+    async login(req, res, next){
+        passport.authenticate(
+            'login',
+            async (err, user, info) => {
+                try {
+                    if (err || !user) {
+                        const error = new Error('An error occurred.');
+
+                        return next(error);
+                    }
+                    req.login(
+                        user,
+                        { session: false },
+                        async (error) => {
+                            if (error) return next(error);
+
+                            const body = { _id: user._id, email: user.email };
+                            const token = jwt.sign({ user: body }, 'TOP_SECRET');
+
+                            return res.json({ token });
+                        }
+                    );
+                }catch(error){
+                    return next(error);
+                }
+            }
+        )(req,res,next);
+    }
+
+    async list(req,res){
+        const all = await AccountModel.find();
+        
+        return res.json(all);
+    }
+
+    async detail(req, res){
+        const id = req.body.account_Id;
+        await AccountModel.findById(id).exec(function (err, account) {
+            const id_user = account.user
+            UserModel.findById(id_user).exec(function (err, user) {
+                res.json({
+                    account : account,
+                    user : user
+                });
+            })
+        })
+    }
 
 }
 

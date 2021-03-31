@@ -9,8 +9,11 @@ const userController = new UserController();
 const accountController = new AccountController();
 
 router.post('/userSignup', userController.create);
-router.get('/list',userController.list);
+router.get('/userlist',userController.list);
 router.get('/detailPerson',userController.detail);
 router.post('/accountSignup',accountController.create);
+router.post('/login',accountController.login);
+router.get('/accountlist',accountController.list);
+router.get('/accountdetail',accountController.detail);
 
 module.exports = router;

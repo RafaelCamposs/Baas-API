@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const routes = require('./routes/routes')
 
 const connectionString = ""
-mongoose.connect(process.env.MONGO_URL,{
+mongoose.connect(connectionString,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });

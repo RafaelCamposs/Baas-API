@@ -35,7 +35,7 @@ passport.use(
         },
         async (email, password, done)=>{
             try{
-                const user = await UserModel.findOne({email});
+                const user = await AccountModel.findOne({email});
 
                 if(!user){
                     return done(null,false,{message:'User not found'});
@@ -59,7 +59,7 @@ passport.use(
     new JWTstrategy(
         {
             secretOrKey: 'TOP_SECRET',
-            jwtFromRequest: ExtractJWT.fromUrlQueryParameter('secret_token')
+            jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken('secret_token')
         },
         async(token, done)=>{
             try{
