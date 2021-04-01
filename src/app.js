@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes')
 
-const connectionString = ""
+const connectionString = 
 mongoose.connect(connectionString,{
     useNewUrlParser: true,
     useUnifiedTopology: true,

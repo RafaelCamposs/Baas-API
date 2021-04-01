@@ -30,6 +30,21 @@ class AccountController {
     }
 
     async login(req, res, next){
+        
+        const email = req.body.email;
+        const password = req.body.password;
+        
+        const userDontExist = await AccountModel.findOne({email});
+        if(!userDontExist){
+            return res.status(404).json('user was not found');
+        }
+
+        const validatePassword = await userDontExist.isValidPassword(password);
+
+        if(!validatePassword){
+            return res.status(401).json('wrong password')
+        }
+
         passport.authenticate(
             'login',
             async (err, user, info) => {
