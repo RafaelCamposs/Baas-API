@@ -13,6 +13,10 @@ const P2PSchema = new Schema({
         required:true,
         unique:true
     },
+    value:{
+        type: Number,
+        required:true,
+    },
     dateOfTransaction:{
         type:Date,
         required:true
