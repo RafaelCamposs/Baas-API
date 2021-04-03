@@ -4,22 +4,54 @@ const AccountModel = require('../models/AccountModel')
 class P2PController{
 
     async transfer(req,res){
-        const sender = req.body.sender;
-        const receiver = req.body.receiver;
+        const senderAccount = req.body.sender;
+        const receiverAccount = req.body.receiver;
         const value = req.body.value;
         const dateOfTransaction = new Date();
 
-        const senderExists = await AccountModel.findById(sender)
+        const senderExists = await AccountModel.findById(senderAccount)
         if(!senderExists) return res.status(404).json('sender does not exists')
         
-        const receiverExists = await AccountModel.findById(receiver)
+        const receiverExists = await AccountModel.findById(receiverAccount)
         if(!receiverExists) return res.status(404).json('receiver does not exists')
 
-        if((senderExists.balance - value)< 0)
-            return res.status(401).json('value unavailable in sender balance')
+        if((senderExists.balance - value)< 0) return res.status(401).json('value unavailable in sender balance')
 
-            
+        const senderBalance = senderExists.balance - value;    
 
+        const receiverBalance = Number(receiverExists.balance) + Number(value);
+
+        AccountModel.findByIdAndUpdate(
+        senderAccount,
+        {$set: {balance: senderBalance}},
+        {upsert: true},
+        (error, result) => {
+            try {
+                console.log('ok');
+            } catch (error) {
+                res.send(error)
+            }
+        })
+
+        AccountModel.findByIdAndUpdate(
+        receiverAccount,
+        {$set: {balance: receiverBalance}},
+        {upsert: true},
+        (error, result) => {
+            try {
+                console.log('ok');
+            } catch (error) {
+                res.send(error)
+            }
+        })
+
+        try {
+            const p2p = await P2PModel.create({senderAccount,receiverAccount,value,dateOfTransaction});
+            res.status(200).json('The transaction was made with success')
+        } catch (error) {
+            res.status(400).json('error')
+        }
+        
     }
 
 
