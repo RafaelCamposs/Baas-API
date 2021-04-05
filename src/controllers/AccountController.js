@@ -92,6 +92,18 @@ class AccountController {
         })
     }
 
+    async balance(req,res){
+        const id =  req.body.account_Id;
+
+        await AccountModel.findById(id).exec(function(err, account){
+            try {
+                res.json(account.balance)
+            } catch (error) {
+                res.json('account not found')
+            }
+        })
+    }
+
 }
 
 module.exports = AccountController;
